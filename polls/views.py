@@ -5,28 +5,25 @@ from django.core.urlresolvers import reverse
 from .models import Question, Choice
 
 
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
 # 首页展示所有问题
 def index(request):
     # latest_question_list2 = Question.objects.order_by('-pub_data')[:2]
     latest_question_list = Question.objects.all()
-    context = {'latest_question_list': latest_question_list}
-    request.encoding = 'utf-8'
+    context = {'latest_question_list': latest_question_list,'name':'投票系统','say':'欢迎使用投票系统!'}
     return render(request, 'polls/index.html', context)
 
 
 # 查看所有问题
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
+    return render(request, 'polls/detail.html', {'question': question,'question_cn':'投票问题','vote':'投票'})
 
 
 # 查看投票结果
 def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
+    return render(request, 'polls/results.html', {'question': question,'question_cn':'投票问题','vote':'票','return_index':'返回'})
 
 
 # 选择投票
@@ -39,6 +36,9 @@ def vote(request, question_id):
         return render(request, 'polls/detail.html', {
             'question': p,
             'error_message': "您尚未选择.",
+            'return_index':'返回',
+            'vote':'投票',
+            'question_cn':'投票问题'
         })
     else:
         selected_choice.votes += 1
